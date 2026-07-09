@@ -12,6 +12,8 @@ else ifeq ($(PLATFORM), xilinx_alveo_u250)
 board_dir          := $(platforms_dir)/xilinx_alveo_u250
 else ifeq ($(PLATFORM), xilinx_alveo_u280)
 board_dir          := $(platforms_dir)/xilinx_alveo_u280
+else ifeq ($(PLATFORM), fx613s_xcvu13p)
+board_dir          := $(platforms_dir)/fx613s_xcvu13p
 else ifeq ($(PLATFORM), xilinx_alveo_u200)
 board_dir          := $(platforms_dir)/xilinx_alveo_u200
 else ifeq ($(PLATFORM), xilinx_vcu118)

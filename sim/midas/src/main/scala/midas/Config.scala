@@ -148,6 +148,13 @@ class XilinxAlveoU200Config
 
 class XilinxAlveoU280Config extends XilinxAlveoU200Config
 
+class FX613sXcvu13pConfig
+    extends Config(new Config((_, _, _) => {
+      case HostMemNumChannels  => 1
+      case PreLinkCircuitPath  => Some("design_1_i/firesim_wrapper_0/inst/firesim_top")
+      case PostLinkCircuitPath => Some("design_1_i/firesim_wrapper_0/inst/firesim_top")
+    }) ++ new XilinxAlveoU250Config)
+
 class NitefuryConfig
     extends Config(new Config((_, _, _) => {
       case Platform                    => (p: Parameters) => new F1Shim()(p)

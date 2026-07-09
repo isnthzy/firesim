@@ -115,6 +115,14 @@ class BaseXilinxAlveoU280Config
         new midas.XilinxAlveoU280Config
     )
 
+class BaseFX613sXcvu13pConfig
+    extends Config(
+      new WithDefaultMemModel ++
+        new WithWiringTransform ++
+        new WithAsyncResetReplacement ++
+        new midas.FX613sXcvu13pConfig
+    )
+
 class BaseNitefuryConfig
     extends Config(
       new WithDefaultMemModel ++

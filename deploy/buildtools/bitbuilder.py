@@ -912,6 +912,12 @@ class XilinxAlveoU250BitBuilder(XilinxAlveoBitBuilder):
         self.BOARD_NAME = "au250"
 
 
+class FX613sXcvu13pBitBuilder(XilinxAlveoBitBuilder):
+    def __init__(self, build_config: BuildConfig, args: Dict[str, Any]) -> None:
+        super().__init__(build_config, args)
+        self.BOARD_NAME = "fx613s_xcvu13p"
+
+
 class XilinxVCU118BitBuilder(XilinxAlveoBitBuilder):
     """Bit builder class that builds a Xilinx VCU118 bitstream from the build config."""
 

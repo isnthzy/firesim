@@ -1,0 +1,4 @@
+# Build-time bitbuilder design configuration for the FireSim Simulation Manager.
+
+bit_builder_type: FX613sXcvu13pBitBuilder
+args: null

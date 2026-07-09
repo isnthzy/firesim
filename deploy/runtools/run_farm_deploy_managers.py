@@ -1343,6 +1343,12 @@ class XilinxAlveoU200InstanceDeployManager(XilinxAlveoInstanceDeployManager):
         self.PLATFORM_NAME = "xilinx_alveo_u200"
 
 
+class FX613sXcvu13pInstanceDeployManager(XilinxAlveoInstanceDeployManager):
+    def __init__(self, parent_node: Inst) -> None:
+        super().__init__(parent_node)
+        self.PLATFORM_NAME = "fx613s_xcvu13p"
+
+
 class RHSResearchNitefuryIIInstanceDeployManager(XilinxAlveoInstanceDeployManager):
     def __init__(self, parent_node: Inst) -> None:
         super().__init__(parent_node)
