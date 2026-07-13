@@ -6,10 +6,23 @@
 set -e
 set -o pipefail
 
-if ! command -v vivado >/dev/null 2>&1 && [ -f /nfs/tools/xilinx/2022.1/Vivado/2022.1/settings64.sh ]; then
-    source /nfs/tools/xilinx/2022.1/Vivado/2022.1/settings64.sh
-    export XILINX_VIVADO=/nfs/tools/xilinx/2022.1/Vivado/2022.1
+REQUIRED_VIVADO_VERSION="2022.1"
+VIVADO_ROOT="${FX613S_VIVADO_ROOT:-/nfs/tools/xilinx/2022.1/Vivado/2022.1}"
+
+if [ -x "$VIVADO_ROOT/bin/vivado" ]; then
+    export XILINX_VIVADO="$VIVADO_ROOT"
     export PATH="$XILINX_VIVADO/bin:$PATH"
+fi
+
+if ! command -v vivado >/dev/null 2>&1; then
+    echo "Vivado $REQUIRED_VIVADO_VERSION is required but was not found" >&2
+    exit 1
+fi
+
+vivado_version=$(vivado -version 2>/dev/null | sed -n 's/^Vivado v\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/p' | head -n 1)
+if [ "$vivado_version" != "$REQUIRED_VIVADO_VERSION" ]; then
+    echo "Vivado $REQUIRED_VIVADO_VERSION is required; found ${vivado_version:-unknown}" >&2
+    exit 1
 fi
 
 if [ -z "${LM_LICENSE_FILE:-}" ] && [ -n "${XILINXD_LICENSE_FILE:-}" ]; then
@@ -81,5 +94,5 @@ if [ -z "$BOARD" ] ; then
 fi
 
 # run build
-cd $CL_DIR
-vivado -mode batch -source $CL_DIR/scripts/main.tcl -tclargs $FREQUENCY $STRATEGY $BOARD
+cd "$CL_DIR"
+vivado -mode batch -source "$CL_DIR/scripts/main.tcl" -tclargs "$FREQUENCY" "$STRATEGY" "$BOARD"

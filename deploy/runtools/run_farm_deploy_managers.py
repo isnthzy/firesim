@@ -1344,9 +1344,53 @@ class XilinxAlveoU200InstanceDeployManager(XilinxAlveoInstanceDeployManager):
 
 
 class FX613sXcvu13pInstanceDeployManager(XilinxAlveoInstanceDeployManager):
+    """FX613S XCVU13P local PCIe manager.
+
+    The software/configuration path is wired up first. Board-touching actions are
+    intentionally blocked until the real FX613S board bring-up phase.
+    """
+
     def __init__(self, parent_node: Inst) -> None:
         super().__init__(parent_node)
         self.PLATFORM_NAME = "fx613s_xcvu13p"
+
+    def _hardware_access_unavailable(self, action: str) -> None:
+        raise AssertionError(
+            "FX613S XCVU13P hardware execution is not implemented in the "
+            f"current no-board software closure. Refusing to {action}. "
+            "Use run-toy-fx613s-xcvu13p-pcie.sh --dry-run in this phase."
+        )
+
+    def load_xdma(self) -> None:
+        self._hardware_access_unavailable("load the XDMA driver")
+
+    def unload_xdma(self) -> None:
+        self._hardware_access_unavailable("unload the XDMA driver")
+
+    def flash_fpgas(self) -> None:
+        self._hardware_access_unavailable("program the FPGA")
+
+    def change_pcie_perms(self) -> None:
+        self._hardware_access_unavailable("change PCIe device permissions")
+
+    def change_all_pcie_perms(self) -> None:
+        self._hardware_access_unavailable(
+            "change PCIe permissions for detected Xilinx devices"
+        )
+
+    def create_fpga_database(self, uridir: str) -> None:
+        self._hardware_access_unavailable("enumerate FX613S PCIe devices")
+
+    def enumerate_fpgas(self, uridir: str) -> None:
+        self._hardware_access_unavailable("enumerate FX613S FPGAs")
+
+    def infrasetup_instance(self, uridir: str) -> None:
+        self._hardware_access_unavailable("set up FX613S hardware infrastructure")
+
+    def start_sim_slot(self, slotno: int) -> None:
+        self._hardware_access_unavailable(
+            f"start an FX613S simulation slot ({slotno})"
+        )
 
 
 class RHSResearchNitefuryIIInstanceDeployManager(XilinxAlveoInstanceDeployManager):

@@ -1,5 +1,9 @@
 set root_dir [pwd]
 set vivado_version [version -short]
+set required_vivado_version "2022.1"
+if {$vivado_version ne $required_vivado_version} {
+  error "FX613S XCVU13P requires Vivado $required_vivado_version; running $vivado_version"
+}
 set vivado_version_major [string range $vivado_version 0 3]
 
 set ifrequency           [lindex $argv 0]

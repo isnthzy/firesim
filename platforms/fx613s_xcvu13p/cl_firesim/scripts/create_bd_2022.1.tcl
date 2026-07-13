@@ -324,11 +324,14 @@ proc create_root_design { parentCell firesim_freq } {
   # Create instance: xdma_0, and set properties
   set xdma_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:xdma:4.1 xdma_0 ]
   set_property -dict [list \
+    CONFIG.INS_LOSS_NYQ {20} \
     CONFIG.PCIE_BOARD_INTERFACE {Custom} \
     CONFIG.PF0_DEVICE_ID_mqdma {903F} \
     CONFIG.SYS_RST_N_BOARD_INTERFACE {Custom} \
     CONFIG.axilite_master_en {true} \
     CONFIG.axilite_master_size {32} \
+    CONFIG.enable_auto_rxeq {true} \
+    CONFIG.ins_loss_profile {Backplane} \
     CONFIG.pf0_device_id {903F} \
     CONFIG.pf0_subsystem_vendor_id {10EE} \
     CONFIG.pf0_vendor_id_mqdma {10EE} \
