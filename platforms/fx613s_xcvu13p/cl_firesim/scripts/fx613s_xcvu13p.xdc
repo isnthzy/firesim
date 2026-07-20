@@ -1,5 +1,10 @@
 # Minimal FX613S XCVU13P constraints for FireSim Phase 1.
 
+# Independent 125 MHz control clock used by the vendor delivery design.
+set_property PACKAGE_PIN H17 [get_ports init_clk]
+set_property IOSTANDARD LVCMOS18 [get_ports init_clk]
+create_clock -name init_clk -period 8.000 [get_ports init_clk]
+
 # DDR0 reference clock.
 set_property PACKAGE_PIN AW23 [get_ports sysclk0_clk_p]
 set_property PACKAGE_PIN AW24 [get_ports sysclk0_clk_n]

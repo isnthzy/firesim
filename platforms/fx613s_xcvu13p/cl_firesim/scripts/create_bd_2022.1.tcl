@@ -229,6 +229,8 @@ proc create_root_design { parentCell firesim_freq } {
 
 
   # Create ports
+  set init_clk [ create_bd_port -dir I -type clk -freq_hz 125000000 init_clk ]
+
   set pcie_perstn [ create_bd_port -dir I -type rst perstn ]
   set_property -dict [ list \
    CONFIG.POLARITY {ACTIVE_LOW} \
@@ -254,8 +256,9 @@ proc create_root_design { parentCell firesim_freq } {
   # Create instance: clk_wiz_0, and set properties
   set clk_wiz_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:clk_wiz:6.0 clk_wiz_0 ]
   set_property -dict [list \
+    CONFIG.PRIM_IN_FREQ {125.000} \
     CONFIG.CLKOUT1_REQUESTED_OUT_FREQ $firesim_freq \
-    CONFIG.USE_LOCKED {false} \
+    CONFIG.USE_LOCKED {true} \
   ] $clk_wiz_0
 
 
@@ -363,12 +366,16 @@ proc create_root_design { parentCell firesim_freq } {
   connect_bd_intf_net -intf_net xdma_0_pcie_mgt [get_bd_intf_ports pci_express_x16] [get_bd_intf_pins xdma_0/pcie_mgt]
 
   # Create port connections
-  connect_bd_net -net ddr4_0_c0_ddr4_ui_clk [get_bd_pins axi_dwidth_converter_0/m_axi_aclk] [get_bd_pins clk_wiz_0/clk_in1] [get_bd_pins ddr4_0/c0_ddr4_ui_clk] [get_bd_pins proc_sys_reset_1/slowest_sync_clk]
+  connect_bd_net -net ddr4_0_c0_ddr4_ui_clk [get_bd_pins axi_dwidth_converter_0/m_axi_aclk] [get_bd_pins ddr4_0/c0_ddr4_ui_clk] [get_bd_pins proc_sys_reset_1/slowest_sync_clk]
+  connect_bd_net -net ddr4_0_c0_ddr4_ui_clk_sync_rst [get_bd_pins ddr4_0/c0_ddr4_ui_clk_sync_rst] [get_bd_pins proc_sys_reset_1/aux_reset_in]
+  connect_bd_net -net ddr4_0_c0_init_calib_complete [get_bd_pins ddr4_0/c0_init_calib_complete] [get_bd_pins proc_sys_reset_1/dcm_locked]
+  connect_bd_net -net init_clk_1 [get_bd_ports init_clk] [get_bd_pins clk_wiz_0/clk_in1]
   connect_bd_net -net pcie_perstn_1 [get_bd_ports perstn] [get_bd_pins xdma_0/sys_rst_n] [get_bd_pins proc_sys_reset_0/ext_reset_in] [get_bd_pins proc_sys_reset_1/ext_reset_in] [get_bd_pins resetn_inv_0/Op1]
   connect_bd_net -net proc_sys_reset_0_interconnect_aresetn [get_bd_pins axi_clock_converter_0/m_axi_aresetn] [get_bd_pins axi_clock_converter_1/m_axi_aresetn] [get_bd_pins axi_dwidth_converter_0/s_axi_aresetn] [get_bd_pins firesim_wrapper_0/sys_reset_n] [get_bd_pins proc_sys_reset_0/interconnect_aresetn]
   connect_bd_net -net resetn_inv_0_Res [get_bd_pins clk_wiz_0/reset] [get_bd_pins ddr4_0/sys_rst] [get_bd_pins resetn_inv_0/Res]
   connect_bd_net -net rst_ddr4_0_100M_interconnect_aresetn [get_bd_pins axi_dwidth_converter_0/m_axi_aresetn] [get_bd_pins ddr4_0/c0_ddr4_aresetn] [get_bd_pins proc_sys_reset_1/interconnect_aresetn]
   connect_bd_net -net sys_clk_30 [get_bd_pins axi_clock_converter_0/m_axi_aclk] [get_bd_pins axi_clock_converter_1/m_axi_aclk] [get_bd_pins axi_dwidth_converter_0/s_axi_aclk] [get_bd_pins clk_wiz_0/clk_out1] [get_bd_pins firesim_wrapper_0/sys_clk_30] [get_bd_pins proc_sys_reset_0/slowest_sync_clk]
+  connect_bd_net -net clk_wiz_0_locked [get_bd_pins clk_wiz_0/locked] [get_bd_pins proc_sys_reset_0/dcm_locked]
   connect_bd_net -net util_ds_buf_IBUF_DS_ODIV2 [get_bd_pins util_ds_buf/IBUF_DS_ODIV2] [get_bd_pins xdma_0/sys_clk]
   connect_bd_net -net util_ds_buf_IBUF_OUT [get_bd_pins util_ds_buf/IBUF_OUT] [get_bd_pins xdma_0/sys_clk_gt]
   connect_bd_net -net xdma_0_axi_aclk [get_bd_pins axi_clock_converter_0/s_axi_aclk] [get_bd_pins axi_clock_converter_1/s_axi_aclk] [get_bd_pins xdma_0/axi_aclk]
